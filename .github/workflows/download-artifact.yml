@@ -21,7 +21,7 @@ jobs:
       id: download
       with:
         name: 'my-artifact'
-        path: /repos/officedev/teamsfx/actions/artifacts/594375111/zip
+        path: https://api.github.com/repos/officedev/teamsfx/actions/artifacts/594375111/zip
 
     - name: 'Echo download path'
       run: echo ${{steps.download.outputs.download-path}}
