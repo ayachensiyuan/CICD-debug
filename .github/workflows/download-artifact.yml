@@ -13,6 +13,7 @@ jobs:
       M365_TENANT_ID: ${{secrets.M365_TENANT_ID}}
       # To specify the env name for multi-env feature.
       TEAMSFX_ENV_NAME: dev
+      GH_TKOEN: ${{secrets.GH_TKOEN}}  
 
     steps:
     - name: checkout code
