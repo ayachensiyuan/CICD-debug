@@ -3,7 +3,7 @@ on:
   # Manually trigger this workflow, and you should pick the right branch.
   workflow_dispatch:
 jobs:
-  provision:
+  download:
     runs-on: ubuntu-latest
     # You can uncomment the line below to use environments (refer to https://docs.github.com/en/actions/reference/environments). 
     #environment: test_environment
@@ -15,13 +15,24 @@ jobs:
       TEAMSFX_ENV_NAME: dev
 
     steps:
-    - uses: actions/checkout@v3
-
-    - uses: actions/download-artifact@v3
-      id: download
+    - name: checkout code
+      uses: actions/checkout@v3
+    
+    - name: setup node
+      uses: actions/setup-node@v3
       with:
-        name: 'my-artifact'
-        path: https://api.github.com/repos/officedev/teamsfx/actions/artifacts/594375111/zip
+        node-version: 16
+    
+    - name: install github cli
+      run: |
+        sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-key C99B11DEB97541F0
+        sudo apt-add-repository https://cli.github.com/packages
+        sudo apt update
+        sudo apt install gh
 
-    - name: 'Echo download path'
-      run: echo ${{steps.download.outputs.download-path}}
+    - name: get CD run id
+      run: |
+        gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28"  -q '[.workflow_runs[] | {name,workflow_id,artifacts_url}] | .[] | select(.name=="CD")'  /repos/officedev/teamsfx/actions/runs >> run_id.json
+        cat run_id.json
+
+
