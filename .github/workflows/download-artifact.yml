@@ -27,6 +27,9 @@ jobs:
       run: |
         sudo apt update
         sudo apt install gh
+    
+    - name: login cli
+      run: gh auth login --with-token  ${{secret.GH_TOKEN}}
 
     - name: get CD run id
       run: |
