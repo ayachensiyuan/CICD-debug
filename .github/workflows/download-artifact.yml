@@ -36,4 +36,13 @@ jobs:
         curl $artifacts_url >> artifacts.json
         cat artifacts.json
 
-
+    - name: download-artifact
+      run: |
+        artifacts=$(cat artifacts.json | jq -r '.archive_download_url')
+        gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" $artifacts >> release.zip
+   
+    - name: upload artifact 
+      uses: actions/upload-artifact@v3
+      with:
+        name: release
+        path: release.zip
