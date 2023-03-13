@@ -32,6 +32,8 @@ jobs:
     - name: get CD run id
       run: |
         gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28"  -q '[.workflow_runs[] | {name,workflow_id,artifacts_url}] | .[] | select(.name=="CD")'  /repos/officedev/teamsfx/actions/runs >> run_id.json
-        cat run_id.json
+        artifacts_url=$(cat run_id.json | jq -r '.artifacts_url')
+        curl $artifacts_url >> artifacts.json
+        cat artifacts.json
 
 
